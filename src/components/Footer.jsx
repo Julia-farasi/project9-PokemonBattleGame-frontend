@@ -24,7 +24,7 @@
 // export default Footer;
 function Footer() {
   return (
-    <footer className="bg-gradient-to-r from-emerald-900 to-green-800 text-white py-6 px-4 mt-12">
+    <footer className="bg-gradient-to-r from-emerald-900 to-green-800 text-white py-6 px-4">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
         {/* Links */}
         <div className="flex space-x-6 text-sm">

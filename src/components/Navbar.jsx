@@ -48,54 +48,54 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-gradient-to-r from-emerald-900 to-green-800 text-white px-6 py-4 shadow-lg flex flex-wrap items-center justify-between gap-4">
+    <nav className="bg-gradient-to-r from-emerald-900 to-green-800 text-white px-6 py-4 shadow-lg flex flex-wrap items-center justify-between gap-4 h-25 font-bold">
       {/* Logo */}
-      <h1 className="text-2xl font-extrabold text-green-300 tracking-wide">
+      <h1 className="text-4xl font-extrabold text-green-400 tracking-wide">
         Pokémon Battle Game
       </h1>
 
       {/* Navigation Links */}
-      <div className="flex flex-wrap gap-4 justify-end">
+      <div className="flex flex-wrap gap-16 justify-end text-lg">
         <Link
           to="/"
-          className="text-white hover:text-green-300 transition-colors duration-150"
+          className="text-white hover:text-green-400 transition-colors duration-150"
         >
           Home
         </Link>
         <Link
           to="/battle"
-          className="text-white hover:text-green-300 transition-colors duration-150"
+          className="text-white hover:text-green-400 transition-colors duration-150"
         >
           Battle
         </Link>
         <Link
           to="/leaderboard"
-          className="text-white hover:text-green-300 transition-colors duration-150"
+          className="text-white hover:text-green-400 transition-colors duration-150"
         >
           Leaderboard
         </Link>
         <Link
           to="/roster"
-          className="text-white hover:text-green-300 transition-colors duration-150"
+          className="text-white hover:text-green-400 transition-colors duration-150"
         >
           My Roster
         </Link>
-        <Link
+        {/* <Link
           to="/details"
           className="text-white hover:text-green-300 transition-colors duration-150"
         >
           Details
-        </Link>
+        </Link> */}
       </div>
 
       {/* Search Input */}
       <div className="flex-1 md:flex-initial">
         <input
           type="text"
-          placeholder="🔍 Suchen..."
+          placeholder="🔍 Search..."
           value={searchParams.get("search") || ""}
           onChange={handleChange}
-          className="w-full md:w-64 px-4 py-2 rounded-xl bg-green-400 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all duration-200"
+          className="w-full md:w-64 px-4 py-2 rounded-xl bg-green-400 text-white placeholder-gray-200 focus:outline-none focus:ring-2 focus:ring-white transition-all duration-200"
         />
       </div>
     </nav>
