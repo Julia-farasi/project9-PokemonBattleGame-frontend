@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Confetti from "react-confetti";
 import { useWindowSize } from "@react-hook/window-size";
+import Swal from "sweetalert2"; // ✅ SweetAlert importieren
 
 const MyRoasterPage = () => {
   const [favorites, setFavorites] = useState([]);
@@ -17,22 +18,39 @@ const MyRoasterPage = () => {
     const updatedFavorites = favorites.filter((fav) => fav.id !== id);
     localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
     setFavorites(updatedFavorites);
-    alert("Removed from favorites");
+
+    // ✅ SweetAlert statt alert()
+    Swal.fire({
+      icon: "success",
+      title: "Removed!",
+      text: "The Pokémon has been removed from your roster.",
+      timer: 1500,
+      showConfirmButton: false,
+    });
   };
 
   const handleClearAllFavorites = () => {
-    const confirmed = window.confirm(
-      "Are you sure you want to remove all favorites?"
-    );
-    if (confirmed) {
-      localStorage.removeItem("favorites");
-      setFavorites([]);
-      setShowConfetti(true);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This will remove all your Pokémon from your roster!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#e11d48",
+      cancelButtonColor: "#10b981",
+      confirmButtonText: "Yes, remove all!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem("favorites");
+        setFavorites([]);
+        setShowConfetti(true);
 
-      setTimeout(() => {
-        setShowConfetti(false);
-      }, 4000); // Confetti für 4 Sekunden anzeigen
-    }
+        Swal.fire("Deleted!", "All your Pokémon have been removed.", "success");
+
+        setTimeout(() => {
+          setShowConfetti(false);
+        }, 4000);
+      }
+    });
   };
 
   return (
@@ -73,10 +91,8 @@ const MyRoasterPage = () => {
                 key={fav.id}
                 className="relative group bg-white text-emerald-900 rounded-xl p-4 h-auto overflow-hidden transition-all duration-500 transform hover:-translate-y-2 hover:scale-[1.02] shadow-md hover:shadow-2xl ring-1 ring-emerald-200 hover:ring-4 hover:ring-emerald-400"
               >
-                {/* ✨ Glanz-Shader-Layer */}
+                {/* Glanz + Hover-Highlight */}
                 <div className="absolute inset-0 z-0 pointer-events-none before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/30 before:to-transparent before:rotate-12 before:animate-glow" />
-
-                {/* ✨ Farbverlauf-Highlight beim Hover */}
                 <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-emerald-100 via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0" />
 
                 <div className="relative z-10 flex justify-between items-baseline">
