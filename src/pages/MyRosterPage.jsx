@@ -16,12 +16,34 @@ const MyRoasterPage = () => {
     alert("Removed from favorites");
   };
 
+  const handleClearAllFavorites = () => {
+    const confirmed = window.confirm(
+      "Are you sure you want to remove all favorites?"
+    );
+    if (confirmed) {
+      localStorage.removeItem("favorites");
+      setFavorites([]);
+      alert("All favorites removed.");
+    }
+  };
+
   return (
     <div className="bg-[#f5f6f8] min-h-screen py-10">
       <div className="container mx-auto px-4">
         <h1 className="text-4xl font-bold mb-8 text-center text-emerald-900">
           My Roaster!
         </h1>
+
+        {favorites.length > 0 && (
+          <div className="flex justify-center mb-6">
+            <button
+              onClick={handleClearAllFavorites}
+              className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded shadow transition duration-200"
+            >
+              🗑️ Remove All Favorites
+            </button>
+          </div>
+        )}
 
         {favorites.length === 0 ? (
           <p className="text-emerald-900 font-bold text-lg text-center">
