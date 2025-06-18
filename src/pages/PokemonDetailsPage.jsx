@@ -1,11 +1,19 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import getTypeGradient from "../utils/getTypeColor"; // ⬅️ neu
 
 function PokemonDetailsPage() {
-  const [pokemon, setPokemon] = useState([]);
-
+  const [pokemon, setPokemon] = useState(null);
   const { id } = useParams();
+  const [favorite, setFavorite] = useState(false);
+
+  useEffect(() => {
+    const currentFavorites =
+      JSON.parse(localStorage.getItem("favorites")) || [];
+    const exists = currentFavorites.some((fav) => fav.id === Number(id));
+    setFavorite(exists);
+  }, [id]);
 
   useEffect(() => {
     const fetchPokemon = async () => {
@@ -32,7 +40,9 @@ function PokemonDetailsPage() {
         {
           id: pokemon.id,
           name: pokemon.name,
-          image: pokemon.sprites.front_default,
+          image:
+            pokemon.sprites?.other?.dream_world?.front_default ||
+            pokemon.sprites?.front_default,
           stats: pokemon.stats,
           types: pokemon.types,
           abilities: pokemon.abilities,
@@ -41,9 +51,7 @@ function PokemonDetailsPage() {
         },
       ];
       localStorage.setItem("favorites", JSON.stringify(newFavorites));
-      alert(`${pokemon.name} added to favorites`);
-    } else {
-      alert(`${pokemon.name} is already in your favorites`);
+      setFavorite(true); // ✅ Zustand aktualisieren
     }
   };
 
@@ -53,9 +61,8 @@ function PokemonDetailsPage() {
     const updatedFavorites = currentFavorites.filter(
       (fav) => fav.id !== pokemon.id
     );
-
     localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
-    alert(`${pokemon.name} removed from favorites`);
+    setFavorite(false); // ✅ Zustand aktualisieren
   };
 
   const isFavorite = (pokemon) => {
@@ -64,61 +71,87 @@ function PokemonDetailsPage() {
     return currentFavorites.some((fav) => fav.id === pokemon.id);
   };
 
+  if (!pokemon) return null;
+
+  const primaryType = pokemon.types?.[0]?.type?.name;
+  const bgGradient = getTypeGradient(primaryType);
+
   return (
-    <div className="min-h-screen bg-[#f5f6f8] py-10">
-      <div className="container mx-auto px-4 flex flex-col justify-center items-center">
-        <h1 className="text-4xl font-bold mb-8 text-center text-emerald-900 capitalize">
-          This Is {pokemon.name}!
+    <div
+      className={`min-h-screen bg-gradient-to-br ${bgGradient} py-10 relative overflow-hidden`}
+    >
+      {/* Glitzer Hintergrund über gesamte Seite */}
+      <div className="absolute inset-0 bg-[url('/sparkles.svg')] bg-cover opacity-10 pointer-events-none animate-pulse" />
+
+      <div className="container mx-auto px-4 flex flex-col justify-center items-center relative z-10">
+        <h1 className="text-4xl font-bold mb-8 text-center text-white capitalize drop-shadow-lg">
+          This is {pokemon.name}!
         </h1>
-        <div className="bg-white text-emerald-900 rounded-xl shadow p-4 hover:shadow-lg transition-all duration-300 w-100 ">
-          <div className="flex justify-between items-baseline">
-            <h2 className="text-3xl font-bold capitalize mb-2">
-              {pokemon.name}
-            </h2>
-            <button
-              onClick={() =>
-                isFavorite(pokemon)
-                  ? handleRemoveFromFavorites(pokemon)
-                  : handleAddToFavorites(pokemon)
-              }
-              className={`text-4xl transition-colors duration-200 ${
-                isFavorite(pokemon)
-                  ? "text-yellow-300 hover:text-emerald-900"
-                  : "text-emerald-900 hover:text-yellow-300"
-              }`}
-            >
-              {isFavorite(pokemon) ? "★" : "☆"}
-            </button>
-          </div>
-          <div className="flex justify-between items-center">
-            <div>
-              <p className="font-bold capitalize mb-1">
-                Type:{" "}
-                {pokemon.types
-                  ?.map((typeInfo) => typeInfo.type.name)
-                  .join(", ")}
-              </p>
-              <p className="font-bold capitalize mb-2">
-                Abilities:{" "}
-                {pokemon.abilities
-                  ?.map((abilityInfo) => abilityInfo.ability.name)
-                  .join(", ")}
-              </p>
+
+        <div
+          className="relative group bg-white text-emerald-900 rounded-xl p-6 shadow-xl transform transition-transform duration-700 hover:rotate-[1deg] hover:scale-105 w-full max-w-md"
+          style={{ perspective: "1000px", transformStyle: "preserve-3d" }}
+        >
+          {/* Shine-Lichtreflex */}
+          <div className="absolute inset-0 before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/30 before:to-transparent before:rotate-45 before:animate-glow pointer-events-none z-0" />
+
+          {/* Glitzer-Effekt */}
+          <div className="absolute inset-0 bg-[url('/sparkles.svg')] bg-cover opacity-0 group-hover:opacity-20 transition-opacity duration-500 pointer-events-none z-0" />
+
+          {/* Inhalt */}
+          <div className="relative z-10">
+            <div className="flex justify-between items-baseline">
+              <h2 className="text-3xl font-bold capitalize mb-2">
+                {pokemon.name}
+              </h2>
+              <button
+                onClick={() =>
+                  favorite
+                    ? handleRemoveFromFavorites()
+                    : handleAddToFavorites()
+                }
+                className={`text-4xl transition-colors duration-200 ${
+                  favorite
+                    ? "text-yellow-300 hover:text-emerald-900"
+                    : "text-emerald-900 hover:text-yellow-300"
+                }`}
+              >
+                {favorite ? "★" : "☆"}
+              </button>
             </div>
-            <p className="font-bold">HP: {pokemon.stats?.[0]?.base_stat}</p>
+
+            <div className="flex justify-between items-center flex-wrap gap-2 mt-2">
+              <div>
+                <p className="font-bold capitalize mb-1">
+                  Type:{" "}
+                  {pokemon.types
+                    .map((typeInfo) => typeInfo.type.name)
+                    .join(", ")}
+                </p>
+                <p className="font-bold capitalize mb-2">
+                  Abilities:{" "}
+                  {pokemon.abilities
+                    .map((abilityInfo) => abilityInfo.ability.name)
+                    .join(", ")}
+                </p>
+              </div>
+              <p className="font-bold">HP: {pokemon.stats?.[0]?.base_stat}</p>
+            </div>
+
+            <img
+              src={pokemon.sprites?.other.dream_world.front_default}
+              alt={pokemon.name}
+              className="w-72 h-72 object-contain mx-auto my-4"
+            />
+
+            <p className="font-bold text-center mt-2 mb-1">
+              Attack: {pokemon.stats?.[1]?.base_stat} | Defense:{" "}
+              {pokemon.stats?.[2]?.base_stat}
+            </p>
+            <p className="font-bold text-center">
+              Height: {pokemon.height / 10}m | Weight: {pokemon.weight / 10}kg
+            </p>
           </div>
-          <img
-            src={pokemon.sprites?.other.dream_world.front_default}
-            alt={pokemon.name}
-            className="w-100"
-          />
-          <p className="font-bold text-center mt-2 mb-1">
-            Attack: {pokemon.stats?.[1]?.base_stat} | Defense:{" "}
-            {pokemon.stats?.[2]?.base_stat}
-          </p>
-          <p className="font-bold text-center">
-            Height: {pokemon.height / 10}m | Weight: {pokemon.weight / 10}kg
-          </p>
         </div>
       </div>
     </div>
