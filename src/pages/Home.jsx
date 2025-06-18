@@ -42,7 +42,9 @@ function Home() {
         {
           id: pokemon.id,
           name: pokemon.name,
-          image: pokemon.sprites?.front_default,
+          image:
+            pokemon.sprites?.other?.dream_world?.front_default ||
+            pokemon.sprites?.front_default,
           stats: pokemon.stats,
           types: pokemon.types,
           abilities: pokemon.abilities,
@@ -160,4 +162,3 @@ function Home() {
 }
 
 export default Home;
-
