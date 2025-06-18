@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Confetti from "react-confetti";
+import { useWindowSize } from "@react-hook/window-size";
 
 const MyRoasterPage = () => {
   const [favorites, setFavorites] = useState([]);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [width, height] = useWindowSize();
 
   useEffect(() => {
     const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
@@ -23,12 +27,25 @@ const MyRoasterPage = () => {
     if (confirmed) {
       localStorage.removeItem("favorites");
       setFavorites([]);
-      alert("All favorites removed.");
+      setShowConfetti(true);
+
+      setTimeout(() => {
+        setShowConfetti(false);
+      }, 4000); // Confetti für 4 Sekunden anzeigen
     }
   };
 
   return (
-    <div className="bg-[#f5f6f8] min-h-screen py-10">
+    <div className="bg-[#f5f6f8] min-h-screen py-10 relative overflow-hidden">
+      {showConfetti && (
+        <Confetti
+          width={width}
+          height={height}
+          recycle={false}
+          numberOfPieces={300}
+        />
+      )}
+
       <div className="container mx-auto px-4">
         <h1 className="text-4xl font-bold mb-8 text-center text-emerald-900">
           My Roaster!
@@ -54,9 +71,15 @@ const MyRoasterPage = () => {
             {favorites.map((fav) => (
               <div
                 key={fav.id}
-                className="bg-white text-emerald-900 rounded-xl shadow p-4 hover:shadow-lg transition-all duration-300 h-auto"
+                className="relative group bg-white text-emerald-900 rounded-xl p-4 h-auto overflow-hidden transition-all duration-500 transform hover:-translate-y-2 hover:scale-[1.02] shadow-md hover:shadow-2xl ring-1 ring-emerald-200 hover:ring-4 hover:ring-emerald-400"
               >
-                <div className="flex justify-between items-baseline">
+                {/* ✨ Glanz-Shader-Layer */}
+                <div className="absolute inset-0 z-0 pointer-events-none before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/30 before:to-transparent before:rotate-12 before:animate-glow" />
+
+                {/* ✨ Farbverlauf-Highlight beim Hover */}
+                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-emerald-100 via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0" />
+
+                <div className="relative z-10 flex justify-between items-baseline">
                   <h2 className="text-3xl font-bold capitalize mb-2">
                     {fav.name}
                   </h2>
@@ -72,11 +95,11 @@ const MyRoasterPage = () => {
                   <img
                     src={fav.image}
                     alt={fav.name}
-                    className="h-60 mx-auto"
+                    className="h-60 mx-auto relative z-10 transition-transform duration-300 group-hover:scale-105"
                   />
                 </Link>
 
-                <div className="text-sm mt-4 space-y-1">
+                <div className="text-sm mt-4 space-y-1 relative z-10">
                   <p className="text-center">
                     <strong>Type:</strong>{" "}
                     {fav.types?.map((t) => t.type.name).join(", ")}
