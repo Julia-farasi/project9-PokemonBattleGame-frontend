@@ -149,7 +149,7 @@ function PokemonDetailsPage() {
               {pokemon.stats?.[2]?.base_stat}
             </p>
             <p className="font-bold text-center">
-              Height: {pokemon.height / 10}m | Weight: {pokemon.weight / 10}kg
+              Height: {pokemon.height / 10} m | Weight: {pokemon.weight / 10} kg
             </p>
           </div>
         </div>

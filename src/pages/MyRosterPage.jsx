@@ -70,7 +70,7 @@ const MyRoasterPage = () => {
         </h1>
 
         {favorites.length > 0 && (
-          <div className="flex justify-center mb-6">
+          <div className="flex justify-end mb-6">
             <button
               onClick={handleClearAllFavorites}
               className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded shadow transition duration-200"
@@ -106,7 +106,13 @@ const MyRoasterPage = () => {
                     ★
                   </button>
                 </div>
-
+                <p className="relative capitalize font-bold pb-1">
+                  Type: {fav.types?.map((t) => t.type.name).join(", ")}
+                </p>
+                <p className="relative capitalize font-bold pb-4">
+                  Abilities:{" "}
+                  {fav.abilities?.map((a) => a.ability.name).join(", ")}
+                </p>
                 <Link to={`/pokemon/${fav.id}`}>
                   <img
                     src={fav.image}
@@ -114,23 +120,13 @@ const MyRoasterPage = () => {
                     className="h-60 mx-auto relative z-10 transition-transform duration-300 group-hover:scale-105"
                   />
                 </Link>
-
                 <div className="text-sm mt-4 space-y-1 relative z-10">
-                  <p className="text-center">
-                    <strong>Type:</strong>{" "}
-                    {fav.types?.map((t) => t.type.name).join(", ")}
-                  </p>
-                  <p className="text-center">
-                    <strong>Height:</strong> {fav.height / 10} m |{" "}
-                    <strong>Weight:</strong> {fav.weight / 10} kg
-                  </p>
-                  <p className="text-center">
-                    <strong>Abilities:</strong>{" "}
-                    {fav.abilities?.map((a) => a.ability.name).join(", ")}
+                  <p className="border-1 p-1 text-center rounded font-semibold">
+                    Height: {fav.height / 10} m | Weight: {fav.weight / 10} kg
                   </p>
                   <div className="pt-2">
-                    <p className="text-center font-semibold">Stats</p>
-                    <ul className="list-disc list-inside text-center">
+                    <p className="font-bold text-base">Stats</p>
+                    <ul className="list-disc list-inside font-semibold">
                       {fav.stats?.map((stat) => (
                         <li key={stat.stat.name}>
                           {stat.stat.name.toUpperCase()}: {stat.base_stat}
