@@ -115,44 +115,45 @@ function Home() {
               </p>
             )}
             {filteredPokemons.map((pokemon) => (
-              <div
-                key={pokemon.id}
-                className="bg-white text-emerald-900 rounded-xl shadow p-4 hover:shadow-lg transition-all duration-300 h-100"
-              >
-                <div className="flex justify-between items-baseline">
-                  <h2 className="text-3xl font-bold capitalize mb-2">
-                    {pokemon.name}
-                  </h2>
-                  {/* <p className="text-sm">HP: {pokemon.stats[0].base_stat}</p> */}
-                  {/* <p className="text-sm uppercase">
+              <Link to={`/pokemon/${pokemon.id}`}>
+                <div
+                  key={pokemon.id}
+                  className="bg-white text-emerald-900 rounded-xl shadow p-4 hover:shadow-lg transition-all duration-300 h-100"
+                >
+                  <div className="flex justify-between items-baseline">
+                    <h2 className="text-3xl font-bold capitalize mb-2">
+                      {pokemon.name}
+                    </h2>
+                    {/* <p className="text-sm">HP: {pokemon.stats[0].base_stat}</p> */}
+                    {/* <p className="text-sm uppercase">
                   TYPE:{" "}
                   {pokemon.types
                     .map((typeInfo) => typeInfo.type.name)
                     .join(", ")}
                 </p> */}
-                  <button
-                    onClick={() =>
-                      isFavorite(pokemon)
-                        ? handleRemoveFromFavorites(pokemon)
-                        : handleAddToFavorites(pokemon)
-                    }
-                    className={`text-4xl transition-colors duration-200 ${
-                      isFavorite(pokemon)
-                        ? "text-yellow-300 hover:text-emerald-900"
-                        : "text-emerald-900 hover:text-yellow-300"
-                    }`}
-                  >
-                    {isFavorite(pokemon) ? "★" : "☆"}
-                  </button>
-                </div>
-                <Link to={`/pokemon/${pokemon.id}`}>
+                    <button
+                      onClick={() =>
+                        isFavorite(pokemon)
+                          ? handleRemoveFromFavorites(pokemon)
+                          : handleAddToFavorites(pokemon)
+                      }
+                      className={`text-4xl transition-colors duration-200 ${
+                        isFavorite(pokemon)
+                          ? "text-yellow-300 hover:text-emerald-900"
+                          : "text-emerald-900 hover:text-yellow-300"
+                      }`}
+                    >
+                      {isFavorite(pokemon) ? "★" : "☆"}
+                    </button>
+                  </div>
+
                   <img
                     src={pokemon.sprites?.other.dream_world.front_default}
                     alt={pokemon.name}
                     className="h-80"
                   />
-                </Link>
-                {/* <p className="text-sm text-center">
+
+                  {/* <p className="text-sm text-center">
                 ATTACK: {pokemon.stats[1].base_stat} | DEFENSE:{" "}
                 {pokemon.stats[2].base_stat}
               </p>
@@ -166,7 +167,8 @@ function Home() {
                   .map((abilityInfo) => abilityInfo.ability.name)
                   .join(", ")}
               </p> */}
-              </div>
+                </div>
+              </Link>
             ))}
           </div>
         )}
