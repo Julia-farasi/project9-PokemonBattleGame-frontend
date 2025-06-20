@@ -94,7 +94,10 @@ function Home() {
   return (
     <div className="bg-[#f5f6f8] min-h-screen py-10">
       <div className="container mx-auto px-4">
-        <h1 className="text-4xl font-bold mb-8 text-center text-emerald-900">
+        <h1 className="text-4xl font-bold mb-8 text-center text-emerald-400">
+          Pokémon Battle Game
+        </h1>
+        <h1 className="text-2xl font-bold mb-8 text-center text-emerald-900">
           Choose Your Pokémon!
         </h1>
         {loading ? (
