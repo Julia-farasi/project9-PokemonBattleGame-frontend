@@ -1,28 +1,32 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Confetti from "react-confetti";
-import { useWindowSize } from "@react-hook/window-size";
+import { useWindowSize } from "@react-hook/window-size"; // für Confetti-Größe
 
 export default function BattlePage() {
+  // Alle nötigen Zustände (Spieler, Gegner, Score usw.)
   const [favorites, setFavorites] = useState([]);
   const [selectedPokemon, setSelectedPokemon] = useState(null);
   const [wildPokemon, setWildPokemon] = useState(null);
   const [result, setResult] = useState("");
   const [showConfetti, setShowConfetti] = useState(false);
   const [score, setScore] = useState(0);
-  const [nameSubmitted, setNameSubmitted] = useState(false);
   const [username, setUsername] = useState("");
+  const [nameSubmitted, setNameSubmitted] = useState(false);
   const [width, height] = useWindowSize();
 
+  // Beim Laden: Favoriten aus localStorage holen
   useEffect(() => {
     const favs = JSON.parse(localStorage.getItem("favorites")) || [];
     setFavorites(Array.isArray(favs) ? favs : []);
   }, []);
 
+  // Beim Start: direkt 1 Gegner laden
   useEffect(() => {
     generateWildPokemon();
   }, []);
 
+  // Holt zufälliges Gegner-Pokémon (aus PokéAPI)
   const generateWildPokemon = async () => {
     const randomId = Math.floor(Math.random() * 150) + 1;
     try {
@@ -30,7 +34,7 @@ export default function BattlePage() {
         `https://pokeapi.co/api/v2/pokemon/${randomId}`
       );
       const wild = res.data;
-      const formatted = {
+      setWildPokemon({
         name: wild.name,
         image:
           wild.sprites?.other?.dream_world?.front_default ||
@@ -38,28 +42,25 @@ export default function BattlePage() {
         attack: wild.stats[1].base_stat,
         defense: wild.stats[2].base_stat,
         hp: wild.stats[0].base_stat,
-      };
-      setWildPokemon(formatted);
+      });
     } catch (err) {
-      console.error("Fehler beim Laden des wilden Pokémon:", err);
+      console.error("Fehler beim Gegnerladen:", err);
     }
   };
 
+  // Kampf starten
   function startBattle() {
     if (!selectedPokemon || !wildPokemon) {
       setResult("❗ Wähle ein Pokémon & Gegner!");
       return;
     }
 
+    // Stärke berechnen (Summe aus HP, ATK, DEF)
     const userPower =
-      (selectedPokemon.attack || 0) +
-      (selectedPokemon.defense || 0) +
-      (selectedPokemon.hp || 0);
-    const wildPower =
-      (wildPokemon.attack || 0) +
-      (wildPokemon.defense || 0) +
-      (wildPokemon.hp || 0);
+      selectedPokemon.attack + selectedPokemon.defense + selectedPokemon.hp;
+    const wildPower = wildPokemon.attack + wildPokemon.defense + wildPokemon.hp;
 
+    // Ergebnis setzen
     if (userPower > wildPower) {
       setResult("🏆 Du hast gewonnen!");
       setScore(userPower);
@@ -73,6 +74,7 @@ export default function BattlePage() {
     }
   }
 
+  // Neues Spiel starten (alles zurücksetzen)
   function resetGame() {
     setSelectedPokemon(null);
     setWildPokemon(null);
@@ -84,6 +86,7 @@ export default function BattlePage() {
     generateWildPokemon();
   }
 
+  // Score an MongoDB senden
   async function submitScore() {
     if (!username) return;
 
@@ -98,6 +101,7 @@ export default function BattlePage() {
     }
   }
 
+  // Komponente für Pokémon-Karten (Spieler/Gegner)
   function PokemonCard({ pokemon, onClick, selected, label }) {
     return (
       <div
@@ -124,6 +128,7 @@ export default function BattlePage() {
     );
   }
 
+  // JSX Rückgabe
   return (
     <div className="bg-[#f5f6f8] min-h-screen py-10 relative">
       {showConfetti && (
@@ -141,12 +146,9 @@ export default function BattlePage() {
 
       <div className="max-w-6xl mx-auto bg-white rounded-xl shadow p-6">
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-          {/* Spieler */}
+          {/* Links: Du */}
           <div className="flex flex-col items-center flex-1">
             <h3 className="font-bold mb-4 text-emerald-900">Meine Favoriten</h3>
-            {favorites.length === 0 && (
-              <p className="text-emerald-900">Keine Favoriten vorhanden!</p>
-            )}
             <div className="flex flex-wrap gap-4 justify-center">
               {favorites.map((p) => (
                 <PokemonCard
@@ -165,15 +167,16 @@ export default function BattlePage() {
                       hp: p.stats[0]?.base_stat,
                     })
                   }
-                  selected={selectedPokemon && selectedPokemon.name === p.name}
+                  selected={selectedPokemon?.name === p.name}
                   label="Du"
                 />
               ))}
             </div>
           </div>
 
-          {/* Kampfzone */}
+          {/* Mitte: Kampfarena */}
           <div className="flex flex-col items-center justify-center min-w-[220px] mx-4">
+            {/* Deine Karte & Gegner */}
             <div className="flex items-center justify-center my-4">
               {selectedPokemon ? (
                 <PokemonCard pokemon={selectedPokemon} selected label="Du" />
@@ -191,18 +194,24 @@ export default function BattlePage() {
                 </div>
               )}
             </div>
+
+            {/* Buttons */}
             <button
-              className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded mt-2"
+              className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded mt-2 cursor-pointer"
               onClick={startBattle}
               disabled={!selectedPokemon || !wildPokemon}
             >
               Fight!
             </button>
+
+            {/* Ergebnis + Score */}
             {result && (
               <div className="mt-4 text-center text-lg font-semibold text-emerald-900">
                 {result}
               </div>
             )}
+
+            {/* Score anzeigen & speichern */}
             {result && (
               <div className="mt-4 text-center">
                 <p className="text-sm text-gray-700 mb-2">Score: {score}</p>
@@ -216,7 +225,7 @@ export default function BattlePage() {
                       className="border px-4 py-2 rounded text-sm mb-2"
                     />
                     <button
-                      className="bg-blue-500 hover:bg-blue-600 text-white text-sm px-4 py-2 rounded"
+                      className="bg-blue-500 hover:bg-blue-600 text-white text-sm px-4 py-2 rounded cursor-pointer"
                       onClick={submitScore}
                       disabled={!username.trim()}
                     >
@@ -230,9 +239,11 @@ export default function BattlePage() {
                 )}
               </div>
             )}
+
+            {/* Neues Spiel */}
             {result && (
               <button
-                className="mt-4 text-sm text-red-500 underline"
+                className="mt-4 text-sm text-red-500 underline cursor-pointer"
                 onClick={resetGame}
               >
                 🔁 Neues Spiel starten
@@ -240,7 +251,7 @@ export default function BattlePage() {
             )}
           </div>
 
-          {/* Gegner */}
+          {/* Rechts: Computer */}
           <div className="flex flex-col items-center flex-1">
             <h3 className="font-bold mb-4 text-emerald-900">Computer</h3>
             {wildPokemon ? (
@@ -250,7 +261,7 @@ export default function BattlePage() {
             )}
             <button
               onClick={generateWildPokemon}
-              className="mt-2 text-sm text-blue-500 underline hover:text-blue-700"
+              className="mt-2 text-sm text-blue-500 underline hover:text-blue-700 cursor-pointer"
             >
               Gegner neu laden
             </button>
