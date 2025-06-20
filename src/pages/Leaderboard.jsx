@@ -27,9 +27,9 @@ function Leaderboard() {
       case 0:
         return "bg-gradient-to-r from-green-400 to-green-600 text-white shadow-lg";
       case 1:
-        return "bg-gradient-to-r from-green-300 to-green-500 text-white";
+        return "bg-gradient-to-r from-green-300 to-green-500";
       case 2:
-        return "bg-gradient-to-r from-green-200 to-green-400 text-white";
+        return "bg-gradient-to-r from-green-200 to-green-400";
       default:
         return "bg-gray-100";
     }
