@@ -45,14 +45,14 @@ export default function BattlePage() {
         hp: wild.stats[0].base_stat,
       });
     } catch (err) {
-      console.error("Fehler beim Gegnerladen:", err);
+      console.error("Error loading opponent:", err);
     }
   };
 
   // Kampf starten
   function startBattle() {
     if (!selectedPokemon || !wildPokemon) {
-      setResult("❗ Wähle ein Pokémon & Gegner!");
+      setResult("❗ Choose your Pokémon and your Opponent");
       return;
     }
 
@@ -65,14 +65,14 @@ export default function BattlePage() {
     const wildPower = wildPokemon.attack + wildPokemon.defense + wildPokemon.hp;
 
     if (userPower > wildPower) {
-      setResult("🏆 Du hast gewonnen!");
+      setResult("🏆 You won the Battle!");
       setScore(userPower);
       setShowConfetti(true);
     } else if (userPower < wildPower) {
-      setResult("😢 Du hast verloren.");
+      setResult("😢 You lost the Battle!");
       setScore(userPower);
     } else {
-      setResult("⚔️ Unentschieden.");
+      setResult("⚔️ It's a draw!");
       setScore(userPower);
     }
   }
@@ -100,7 +100,7 @@ export default function BattlePage() {
       });
       setNameSubmitted(true);
     } catch (err) {
-      console.error("Fehler beim Speichern:", err);
+      console.error("Error", err);
     }
   }
 
@@ -168,8 +168,8 @@ export default function BattlePage() {
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
           {/* Links: Du */}
           <div className="flex flex-col items-center flex-1">
-            <h3 className="font-bold mb-4 text-emerald-900">Meine Favoriten</h3>
-            <h3 className=" mb-4 text-emerald-900">Wähle einen aus</h3>
+            <h3 className="font-bold mb-4 text-emerald-900">My Roster</h3>
+            <h3 className="mb-4 text-emerald-900">Choose One</h3>
             <div className="flex flex-wrap gap-4 justify-center">
               {favorites.map((p) => (
                 <PokemonCard
@@ -250,13 +250,11 @@ export default function BattlePage() {
                       onClick={submitScore}
                       disabled={!username.trim()}
                     >
-                      Score speichern
+                      Save Score
                     </button>
                   </div>
                 ) : (
-                  <p className="text-green-600 font-semibold">
-                    Score gespeichert ✔️
-                  </p>
+                  <p className="text-green-600 font-semibold">Score saved ✔️</p>
                 )}
               </div>
             )}
@@ -267,7 +265,7 @@ export default function BattlePage() {
                 className="mt-4 text-sm text-white bg-yellow-400 px-4 py-2 rounded cursor-pointer"
                 onClick={resetGame}
               >
-                Neues Spiel starten
+                🔁 Start a new Battle
               </button>
             )}
           </div>
@@ -278,13 +276,13 @@ export default function BattlePage() {
             {wildPokemon ? (
               <PokemonCard pokemon={wildPokemon} label="Gegner" />
             ) : (
-              <p className="text-gray-500">Lade Gegner...</p>
+              <p className="text-gray-500">Loading Opponent...</p>
             )}
             <button
               onClick={generateWildPokemon}
               className="mt-2 text-sm bg-gray-500 hover:bg-green-700  text-white px-6 py-2 rounded cursor-pointer"
             >
-              Gegner neu laden
+              Get new Opponent
             </button>
           </div>
         </div>
