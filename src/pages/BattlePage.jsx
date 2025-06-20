@@ -14,6 +14,7 @@ export default function BattlePage() {
   const [username, setUsername] = useState("");
   const [nameSubmitted, setNameSubmitted] = useState(false);
   const [width, height] = useWindowSize();
+  // const [showFireball, setShowFireball] = useState(false);
 
   // Beim Laden: Favoriten aus localStorage holen
   useEffect(() => {
@@ -55,12 +56,14 @@ export default function BattlePage() {
       return;
     }
 
-    // Stärke berechnen (Summe aus HP, ATK, DEF)
+    // Feuerball starten
+    // setShowFireball(true);
+    // setTimeout(() => setShowFireball(false), 800); // nach 800ms wieder entfernen
+
     const userPower =
       selectedPokemon.attack + selectedPokemon.defense + selectedPokemon.hp;
     const wildPower = wildPokemon.attack + wildPokemon.defense + wildPokemon.hp;
 
-    // Ergebnis setzen
     if (userPower > wildPower) {
       setResult("🏆 Du hast gewonnen!");
       setScore(userPower);
@@ -140,6 +143,23 @@ export default function BattlePage() {
         />
       )}
 
+      {/* FEUERBALL-ANIMATION
+      {showFireball && (
+        <div className="absolute top-1/2 left-[120px] z-50 animate-fireball pointer-events-none">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="40"
+            height="40"
+            viewBox="0 0 24 24"
+            fill="orange"
+            className="drop-shadow-xl"
+          >
+            <path d="M13 2s-3 3-3 7 4 5 4 5-2-1-2-4c0-2 1-3 1-3s0 4 4 4c2.8 0 3-3 3-4 0-2-2-5-7-5z" />
+            <circle cx="12" cy="12" r="2" fill="red" />
+          </svg>
+        </div>
+      )} */}
+
       <h2 className="text-4xl font-bold mb-8 text-center text-emerald-900">
         Pokémon Battle!
       </h2>
@@ -149,6 +169,7 @@ export default function BattlePage() {
           {/* Links: Du */}
           <div className="flex flex-col items-center flex-1">
             <h3 className="font-bold mb-4 text-emerald-900">Meine Favoriten</h3>
+            <h3 className=" mb-4 text-emerald-900">Wähle einen aus</h3>
             <div className="flex flex-wrap gap-4 justify-center">
               {favorites.map((p) => (
                 <PokemonCard
@@ -243,10 +264,10 @@ export default function BattlePage() {
             {/* Neues Spiel */}
             {result && (
               <button
-                className="mt-4 text-sm text-red-500 underline cursor-pointer"
+                className="mt-4 text-sm text-white bg-yellow-400 px-4 py-2 rounded cursor-pointer"
                 onClick={resetGame}
               >
-                🔁 Neues Spiel starten
+                Neues Spiel starten
               </button>
             )}
           </div>
@@ -261,7 +282,7 @@ export default function BattlePage() {
             )}
             <button
               onClick={generateWildPokemon}
-              className="mt-2 text-sm text-blue-500 underline hover:text-blue-700 cursor-pointer"
+              className="mt-2 text-sm bg-gray-500 hover:bg-green-700  text-white px-6 py-2 rounded cursor-pointer"
             >
               Gegner neu laden
             </button>

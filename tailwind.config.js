@@ -5,6 +5,7 @@ export default {
     extend: {
       animation: {
         glow: "glow 3s ease-in-out infinite",
+        // fireball: "fireball 0.8s ease-out forwards",
       },
       keyframes: {
         glow: {
@@ -20,6 +21,16 @@ export default {
             opacity: "0",
           },
         },
+        // fireball: {
+        //   "0%": {
+        //     transform: "translateX(0) rotate(0deg)",
+        //     opacity: "1",
+        //   },
+        //   "100%": {
+        //     transform: "translateX(800px) rotate(720deg)",
+        //     opacity: "0",
+        //   },
+        // },
       },
     },
   },
