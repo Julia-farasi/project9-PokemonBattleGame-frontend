@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import getTypeGradient from "../utils/getTypeColor"; // ⬅️ neu
+import getTypeGradient from "../utils/getTypeColor"; // ⬅ neu/Hintergund der Pokemons nach Farben
 
 function PokemonDetailsPage() {
   const [pokemon, setPokemon] = useState(null);
@@ -51,7 +51,7 @@ function PokemonDetailsPage() {
         },
       ];
       localStorage.setItem("favorites", JSON.stringify(newFavorites));
-      setFavorite(true); // ✅ Zustand aktualisieren
+      setFavorite(true); // Zustand aktualisieren
     }
   };
 
@@ -62,7 +62,7 @@ function PokemonDetailsPage() {
       (fav) => fav.id !== pokemon.id
     );
     localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
-    setFavorite(false); // ✅ Zustand aktualisieren
+    setFavorite(false); // Zustand aktualisieren
   };
 
   const isFavorite = (pokemon) => {

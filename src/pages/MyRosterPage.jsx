@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Confetti from "react-confetti";
 import { useWindowSize } from "@react-hook/window-size";
-import Swal from "sweetalert2"; // ✅ SweetAlert importieren
+import Swal from "sweetalert2"; // SweetAlert importieren
 
 const MyRoasterPage = () => {
   const [favorites, setFavorites] = useState([]);
@@ -19,7 +19,7 @@ const MyRoasterPage = () => {
     localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
     setFavorites(updatedFavorites);
 
-    // ✅ SweetAlert statt alert()
+    // SweetAlert statt alert()
     Swal.fire({
       icon: "success",
       title: "Removed!",
