@@ -87,26 +87,26 @@ const MyRoasterPage = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {favorites.map((fav) => (
-              <Link to={`/pokemon/${fav.id}`}>
-                <div
-                  key={fav.id}
-                  className="relative group bg-white text-emerald-900 rounded-xl p-4 h-auto overflow-hidden transition-all duration-500 transform hover:-translate-y-2 hover:scale-[1.02] shadow-md hover:shadow-2xl ring-1 ring-emerald-200 hover:ring-4 hover:ring-emerald-400"
-                >
-                  {/* Glanz + Hover-Highlight */}
-                  <div className="absolute inset-0 z-0 pointer-events-none before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/30 before:to-transparent before:rotate-12 before:animate-glow" />
-                  <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-emerald-100 via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0" />
+              <div
+                key={fav.id}
+                className="relative group bg-white text-emerald-900 rounded-xl p-4 h-auto overflow-hidden transition-all duration-500 transform hover:-translate-y-2 hover:scale-[1.02] shadow-md hover:shadow-2xl ring-1 ring-emerald-200 hover:ring-4 hover:ring-emerald-400"
+              >
+                {/* Glanz + Hover-Highlight */}
+                <div className="absolute inset-0 z-0 pointer-events-none before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/30 before:to-transparent before:rotate-12 before:animate-glow" />
+                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-emerald-100 via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0" />
 
-                  <div className="relative z-10 flex justify-between items-baseline">
-                    <h2 className="text-3xl font-bold capitalize mb-2">
-                      {fav.name}
-                    </h2>
-                    <button
-                      onClick={() => handleRemoveFromFavorites(fav.id)}
-                      className="text-4xl text-yellow-300 hover:text-emerald-900 transition-colors duration-200"
-                    >
-                      ★
-                    </button>
-                  </div>
+                <div className="relative z-10 flex justify-between items-baseline">
+                  <h2 className="text-3xl font-bold capitalize mb-2">
+                    {fav.name}
+                  </h2>
+                  <button
+                    onClick={() => handleRemoveFromFavorites(fav.id)}
+                    className="text-4xl text-yellow-300 hover:text-emerald-900 transition-colors duration-200"
+                  >
+                    ★
+                  </button>
+                </div>
+                <Link to={`/pokemon/${fav.id}`}>
                   <p className="relative capitalize font-bold pb-1">
                     Type: {fav.types?.map((t) => t.type.name).join(", ")}
                   </p>
@@ -136,8 +136,8 @@ const MyRoasterPage = () => {
                       </ul>
                     </div>
                   </div>
-                </div>
-              </Link>
+                </Link>
+              </div>
             ))}
           </div>
         )}

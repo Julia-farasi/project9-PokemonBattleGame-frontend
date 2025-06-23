@@ -250,7 +250,7 @@ export default function BattlePage() {
                       onClick={submitScore}
                       disabled={!username.trim()}
                     >
-                      Save Score
+                      Save Name + Score
                     </button>
                   </div>
                 ) : (
