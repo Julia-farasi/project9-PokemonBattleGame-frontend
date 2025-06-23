@@ -3,14 +3,16 @@ import { useEffect, useState, useSearch } from "react";
 import { Link } from "react-router-dom";
 import { DotSpinner } from "ldrs/react";
 import "ldrs/react/DotSpinner.css";
-
+import { useSearchParams } from "react-router-dom";
 // import { useSearch } from "../context/SearchContext";
 
 function Home() {
   const [pokemons, setPokemons] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
+
+  const [searchParams] = useSearchParams();
+  const searchTerm = searchParams.get("search") || "";
 
   useEffect(() => {
     const fetchPokemons = async () => {
