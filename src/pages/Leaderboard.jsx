@@ -8,8 +8,9 @@ function Leaderboard() {
     const fetchLeaderboard = async () => {
       try {
         const response = await axios.get(
-          "https://pokemon-battle-backend-z30t.onrender.com"
-        ); //"http://localhost:8000/leaderboard"
+          // "http://localhost:8000/leaderboard"
+          "https://pokemon-battle-backend-z30t.onrender.com/leaderboard"
+        ); //
 
         // Zugriff auf das verschachtelte data.data
         const rawEntries = response.data.data || [];
