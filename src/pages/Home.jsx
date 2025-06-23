@@ -3,6 +3,7 @@ import { useEffect, useState, useSearch } from "react";
 import { Link } from "react-router-dom";
 import { DotSpinner } from "ldrs/react";
 import "ldrs/react/DotSpinner.css";
+import { useSearchParams } from "react-router-dom";
 
 // import { useSearch } from "../context/SearchContext";
 
@@ -10,7 +11,9 @@ function Home() {
   const [pokemons, setPokemons] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
+
+  const [searchParams] = useSearchParams();
+  const searchTerm = searchParams.get("search") || "";
 
   useEffect(() => {
     const fetchPokemons = async () => {
@@ -83,6 +86,7 @@ function Home() {
     return currentFavorites.some((fav) => fav.id === pokemon.id);
   };
 
+  // Dann filtern wie gehabt:
   const filteredPokemons = searchTerm
     ? pokemons.filter(
         (el) =>
@@ -101,9 +105,9 @@ function Home() {
           Choose Your Pokémon!
         </h1>
         {loading ? (
-          <p className="text-center mt-16">
+          <div className="text-center mt-16">
             <DotSpinner size="100" speed="0.9" color="green" />
-          </p>
+          </div>
         ) : (
           <div
             id="pokemon-container"

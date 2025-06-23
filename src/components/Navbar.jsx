@@ -1,43 +1,11 @@
-// import { Link, useSearchParams } from "react-router-dom";
-
-// export default function Navbar() {
-//   const [searchParams, setSearchParams] = useSearchParams();
-
-//   const handleChange = (e) => {
-//     const query = e.target.value;
-//     if (query) {
-//       setSearchParams({ search: query });
-//     } else {
-//       setSearchParams({});
-//     }
-//   };
-
-//   return (
-//     <>
-//       <nav className="">
-//         <h1 className="">Pokemon Battle Game</h1>
-
-//         <input
-//           type="text"
-//           placeholder="🔎 Suchen..."
-//           value={searchParams.get("search") || ""}
-//           onChange={handleChange}
-//           className="rounded-lg px-4 py-2 bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400"
-//         />
-//         <Link to="/">Home</Link>
-//         <Link to="/battle">Battle</Link>
-//         <Link to="/leaderboard">Leaderboard</Link>
-//         <Link to="/roster">MyRosterPage</Link>
-//         <Link to="/details">PokemonDetailsPage</Link>
-//       </nav>
-//     </>
-//   );
-// }
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams, useLocation } from "react-router-dom";
 
 export default function Navbar() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
 
+  // Nur aktiv, wenn wir auf der Home-Seite sind
+  const isOnHome = location.pathname === "/";
   const handleChange = (e) => {
     const query = e.target.value;
     if (query) {
@@ -73,6 +41,20 @@ export default function Navbar() {
             Battle Game
           </h1>
         </div>
+
+        {/* Suchfeld nur anzeigen, wenn auf der Home-Seite */}
+        {isOnHome && (
+          <div className="relative top-14">
+            <input
+              type="text"
+              placeholder="🔍 Search..."
+              value={searchParams.get("search") || ""}
+              onChange={handleChange}
+              className="w-full md:w-64 px-4 py-2 rounded-xl bg-white text-black placeholder-grey-200 focus:outline-none focus:ring-2 focus:ring-black transition-all duration-200"
+            />
+          </div>
+        )}
+
         {/* Navigation Links */}
         <div className="flex flex-wrap gap-16 text-lg relative top-16">
           <Link
@@ -137,17 +119,6 @@ export default function Navbar() {
         >
           Details
         </Link> */}
-        </div>
-
-        {/* Search Input */}
-        <div className="relative top-14">
-          <input
-            type="text"
-            placeholder="🔍 Search..."
-            value={searchParams.get("search") || ""}
-            onChange={handleChange}
-            className="w-full md:w-64 px-4 py-2 rounded-xl bg-white text-black placeholder-grey-200 focus:outline-none focus:ring-2 focus:ring-black transition-all duration-200"
-          />
         </div>
       </nav>
     </div>
