@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Confetti from "react-confetti";
 import { useWindowSize } from "@react-hook/window-size"; // für Confetti-Größe
+import { useNavigate } from "react-router-dom";
 
 export default function BattlePage() {
   // Alle nötigen Zustände (Spieler, Gegner, Score usw.)
@@ -15,6 +16,7 @@ export default function BattlePage() {
   const [nameSubmitted, setNameSubmitted] = useState(false);
   const [width, height] = useWindowSize();
   // const [showFireball, setShowFireball] = useState(false);
+  const navigate = useNavigate();
 
   // Beim Laden: Favoriten aus localStorage holen
   useEffect(() => {
@@ -99,6 +101,8 @@ export default function BattlePage() {
         score,
       });
       setNameSubmitted(true);
+      // Nach Speichern weiterleiten zur Leaderboard-Seite
+      navigate("/leaderboard");
     } catch (err) {
       console.error("Error", err);
     }
@@ -245,6 +249,7 @@ export default function BattlePage() {
                       placeholder="Dein Name"
                       className="border px-4 py-2 rounded text-sm mb-2"
                     />
+
                     <button
                       className="bg-blue-500 hover:bg-blue-600 text-white text-sm px-4 py-2 rounded cursor-pointer"
                       onClick={submitScore}
