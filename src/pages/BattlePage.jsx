@@ -96,10 +96,13 @@ export default function BattlePage() {
     if (!username) return;
 
     try {
-      await axios.post("http://localhost:8000/leaderboard", {
-        username,
-        score,
-      });
+      await axios.post(
+        "https://pokemon-battle-backend-z30t.onrender.com/leaderboard",
+        {
+          username,
+          score,
+        }
+      );
       setNameSubmitted(true);
       // Nach Speichern weiterleiten zur Leaderboard-Seite
       navigate("/leaderboard");
