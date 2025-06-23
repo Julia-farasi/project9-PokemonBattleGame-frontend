@@ -86,7 +86,7 @@ function Home() {
     return currentFavorites.some((fav) => fav.id === pokemon.id);
   };
 
-  // Dann filtern wie gehabt:
+  // filtern
   const filteredPokemons = searchTerm
     ? pokemons.filter(
         (el) =>

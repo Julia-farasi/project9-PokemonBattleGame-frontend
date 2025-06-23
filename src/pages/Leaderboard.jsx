@@ -7,7 +7,9 @@ function Leaderboard() {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/leaderboard");
+        const response = await axios.get(
+          "https://pokemon-battle-backend-z30t.onrender.com"
+        ); //"http://localhost:8000/leaderboard"
 
         // Zugriff auf das verschachtelte data.data
         const rawEntries = response.data.data || [];
